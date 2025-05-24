@@ -654,3 +654,56 @@ main {
     margin-top: 1rem;
   }
 }
+
+.difficulty-panel {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.difficulty-button {
+  padding: 8px 16px;
+  border: 2px solid #1a73e8;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+  color: #1a73e8;
+  width: 140px;
+}
+
+.difficulty-button:hover {
+  background: #e8f0fe;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.difficulty-button.active {
+  background: #1a73e8;
+  color: white;
+}
+
+.difficulty-button.active:hover {
+  background: #1557b0;
+}
+
+@media (max-width: 600px) {
+  .difficulty-panel {
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .difficulty-button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    width: 100px;
+  }
+}

@@ -47,53 +47,68 @@ const solveSudokuBoard = (board: number[][]): boolean => {
 };
 
 // Функция для генерации нового поля
-const generateNewBoard = (): number[][] => {
-  const board = Array(9).fill(null).map(() => Array(9).fill(0));
-  
+const generateNewBoard = (
+  difficulty: "easy" | "medium" | "hard"
+): number[][] => {
+  const board = Array(9)
+    .fill(null)
+    .map(() => Array(9).fill(0));
+
   for (let block = 0; block < 3; block++) {
     const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     for (let i = nums.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [nums[i], nums[j]] = [nums[j], nums[i]];
     }
-    
+
     const startRow = block * 3;
     const startCol = block * 3;
     let numIndex = 0;
-    
+
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         board[startRow + i][startCol + j] = nums[numIndex++];
       }
     }
   }
-  
+
   solveSudokuBoard(board);
-  
-  const cellsToRemove = 40;
+
+  const cellsToRemove = {
+    easy: 35, // 46 начальных ячеек
+    medium: 45, // 36 начальных ячеек
+    hard: 55, // 26 начальных ячеек
+  }[difficulty];
+
   let removed = 0;
-  
+
   while (removed < cellsToRemove) {
     const row = Math.floor(Math.random() * 9);
     const col = Math.floor(Math.random() * 9);
-    
+
     if (board[row][col] !== 0) {
       board[row][col] = 0;
       removed++;
     }
   }
-  
+
   return board;
 };
 
-const initialBoard = generateNewBoard();
+const initialBoard = generateNewBoard("medium");
 
 function App() {
   const [board, setBoard] = useState<number[][]>(initialBoard);
-  const [initialGameBoard, setInitialGameBoard] = useState<number[][]>(initialBoard);
-  const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
+  const [initialGameBoard, setInitialGameBoard] =
+    useState<number[][]>(initialBoard);
+  const [selectedCell, setSelectedCell] = useState<[number, number] | null>(
+    null
+  );
   const [invalidNumber, setInvalidNumber] = useState<number | null>(null);
   const [isGameComplete, setIsGameComplete] = useState(false);
+  const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">(
+    "medium"
+  );
 
   const remainingNumbers = useMemo(() => {
     const counts = new Array(10).fill(9); // 0-9, где 0 не используется
@@ -150,7 +165,7 @@ function App() {
   };
 
   const startNextGame = () => {
-    const newBoard = generateNewBoard();
+    const newBoard = generateNewBoard(difficulty);
     setBoard(newBoard);
     setInitialGameBoard(newBoard);
     setSelectedCell(null);
@@ -158,8 +173,13 @@ function App() {
     setIsGameComplete(false);
   };
 
-  const startNewGame = () => {
-    setBoard(initialGameBoard.map((row) => [...row]));
+  const handleDifficultyChange = (
+    newDifficulty: "easy" | "medium" | "hard"
+  ) => {
+    setDifficulty(newDifficulty);
+    const newBoard = generateNewBoard(newDifficulty);
+    setBoard(newBoard);
+    setInitialGameBoard(newBoard);
     setSelectedCell(null);
     setInvalidNumber(null);
     setIsGameComplete(false);
@@ -172,8 +192,44 @@ function App() {
     }
   };
 
+  const startNewGame = () => {
+    setBoard(initialGameBoard.map((row) => [...row]));
+    setSelectedCell(null);
+    setInvalidNumber(null);
+    setIsGameComplete(false);
+  };
+
   return (
     <div className="app">
+      <div className="difficulty-panel">
+        <button
+          className={`difficulty-button ${
+            difficulty === "easy" ? "active" : ""
+          }`}
+          onClick={() => handleDifficultyChange("easy")}
+          title="Нормальный уровень"
+        >
+          Нормальный
+        </button>
+        <button
+          className={`difficulty-button ${
+            difficulty === "medium" ? "active" : ""
+          }`}
+          onClick={() => handleDifficultyChange("medium")}
+          title="Сложный уровень"
+        >
+          Сложный
+        </button>
+        <button
+          className={`difficulty-button ${
+            difficulty === "hard" ? "active" : ""
+          }`}
+          onClick={() => handleDifficultyChange("hard")}
+          title="Эксперт"
+        >
+          Эксперт
+        </button>
+      </div>
       <header>
         <button
           className="header-button new-game-button"
