@@ -125,7 +125,23 @@ function App() {
   return (
     <div className="app">
       <header>
-        <h1>❤️</h1>
+        <button
+          className="header-button new-game-button"
+          onClick={startNewGame}
+          title="Новая игра"
+        >
+          Новая
+        </button>
+        <h1 onClick={startNewGame} title="Перезапустить текущую игру">
+          ❤️
+        </h1>
+        <button
+          className="header-button next-game-button"
+          onClick={startNewGame}
+          title="Следующая игра"
+        >
+          Следующая
+        </button>
       </header>
       <main>
         <div className={`board ${isGameComplete ? "game-complete" : ""}`}>
@@ -185,11 +201,6 @@ function App() {
               title="Завершить игру"
             >
               Завершить
-            </button>
-          )}
-          {isGameComplete && (
-            <button className="new-game-button" onClick={startNewGame}>
-              Новая игра
             </button>
           )}
         </div>

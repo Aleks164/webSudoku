@@ -65,6 +65,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 20px;
 }
 
 h1 {
@@ -78,6 +79,47 @@ h1 {
   justify-content: center;
   animation: heart-beat 1.5s ease-in-out infinite;
   transform-origin: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+h1:hover {
+  transform: scale(1.1);
+}
+
+.header-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  text-align: center;
+}
+
+.header-button.new-game-button {
+  background: #4caf50;
+  color: white;
+}
+
+.header-button.new-game-button:hover {
+  background: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-button.next-game-button {
+  background: #2196f3;
+  color: white;
+}
+
+.header-button.next-game-button:hover {
+  background: #1976d2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes heart-beat {
@@ -277,8 +319,8 @@ main {
   position: absolute;
   top: -8px;
   right: -8px;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   background: #1a73e8;
   color: white;
   border-radius: 50%;
@@ -371,8 +413,20 @@ main {
     gap: 6px;
   }
 
+  header {
+    gap: 10px;
+  }
+
+  .header-button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    width: 130px;
+  }
+
   h1 {
-    font-size: 1.5rem;
+    font-size: 2rem;
+    width: 40px;
+    height: 40px;
   }
 
   .cell {
