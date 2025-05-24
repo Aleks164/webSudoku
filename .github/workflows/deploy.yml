@@ -1,29 +1,27 @@
-name: Deploy to GitHub Pages
+name: Deploy to GithubPages
 
-on:
-  push:
-    branches: [ main ]
+on: push
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+  deploy-to-gh-pages:
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install Dependencies
-        run: npm install
+      - name: Install Packages
+        run: |
+          npm install
 
       - name: Build
-        run: npm run build
+        run: |
+          npm run build
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+        # https://github.com/marketplace/actions/deploy-to-github-pages
+        uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
-          folder: dist
-          branch: gh-pages 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.          
+          FOLDER: dist # The folder the action should deploy.
+          CLEAN: true # Automatically remove deleted files from the deploy branch
