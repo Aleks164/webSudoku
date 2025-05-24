@@ -1,8 +1,13 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import "./App.css";
 
 // Функция для проверки, можно ли поставить число в ячейку
-const isValidPlacement = (board: number[][], row: number, col: number, num: number): boolean => {
+const isValidPlacement = (
+  board: number[][],
+  row: number,
+  col: number,
+  num: number
+): boolean => {
   for (let x = 0; x < 9; x++) {
     if (board[row][x] === num) return false;
   }
@@ -29,7 +34,7 @@ const solveSudokuBoard = (board: number[][]): boolean => {
           const j = Math.floor(Math.random() * (k + 1));
           [nums[k], nums[j]] = [nums[j], nums[k]];
         }
-        
+
         for (const num of nums) {
           if (isValidPlacement(board, i, j, num)) {
             board[i][j] = num;
@@ -109,6 +114,59 @@ function App() {
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">(
     "medium"
   );
+  const [startTime, setStartTime] = useState<number>(Date.now());
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [bestTime, setBestTime] = useState<number>(() => {
+    const saved = localStorage.getItem(`bestTime_${difficulty}`);
+    return saved ? parseInt(saved) : Infinity;
+  });
+
+  // Обновление времени каждую секунду
+  useEffect(() => {
+    if (!isGameComplete) {
+      const timer = setInterval(() => {
+        setElapsedTime(Date.now() - startTime);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isGameComplete, startTime]);
+
+  // Сохранение лучшего времени при завершении игры
+  useEffect(() => {
+    if (isGameComplete) {
+      const currentBestTime = localStorage.getItem(`bestTime_${difficulty}`);
+      const currentBest = currentBestTime
+        ? parseInt(currentBestTime)
+        : Infinity;
+
+      if (elapsedTime < currentBest) {
+        localStorage.setItem(`bestTime_${difficulty}`, elapsedTime.toString());
+        setBestTime(elapsedTime);
+      }
+    }
+  }, [isGameComplete, elapsedTime, difficulty]);
+
+  // Обновление лучшего времени при смене сложности
+  useEffect(() => {
+    const saved = localStorage.getItem(`bestTime_${difficulty}`);
+    setBestTime(saved ? parseInt(saved) : Infinity);
+  }, [difficulty]);
+
+  // Форматирование времени
+  const formatTime = (ms: number): string => {
+    if (ms === Infinity) return "--:--";
+
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+
+    const pad = (num: number) => num.toString().padStart(2, "0");
+
+    if (hours > 0) {
+      return `${pad(hours)}:${pad(minutes % 60)}:${pad(seconds % 60)}`;
+    }
+    return `${pad(minutes)}:${pad(seconds % 60)}`;
+  };
 
   const remainingNumbers = useMemo(() => {
     const counts = new Array(10).fill(9); // 0-9, где 0 не используется
@@ -171,6 +229,8 @@ function App() {
     setSelectedCell(null);
     setInvalidNumber(null);
     setIsGameComplete(false);
+    setStartTime(Date.now());
+    setElapsedTime(0);
   };
 
   const handleDifficultyChange = (
@@ -183,6 +243,8 @@ function App() {
     setSelectedCell(null);
     setInvalidNumber(null);
     setIsGameComplete(false);
+    setStartTime(Date.now());
+    setElapsedTime(0);
   };
 
   const solveSudoku = () => {
@@ -197,6 +259,8 @@ function App() {
     setSelectedCell(null);
     setInvalidNumber(null);
     setIsGameComplete(false);
+    setStartTime(Date.now());
+    setElapsedTime(0);
   };
 
   return (
@@ -325,6 +389,15 @@ function App() {
               Это же невероятно сложная игра, в которой надо очень много
               думать...
             </p>
+            <div className="victory-times">
+              <p className="victory-time">
+                Время решения: {formatTime(elapsedTime)}
+                {elapsedTime < bestTime && (
+                  <span className="new-record">Новый рекорд! 🏆</span>
+                )}
+              </p>
+              <p className="best-time">Лучшее время: {formatTime(bestTime)}</p>
+            </div>
             <div className="victory-emoji">🎉</div>
             <button
               className="victory-button"

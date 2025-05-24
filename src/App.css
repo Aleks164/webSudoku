@@ -677,3 +677,62 @@ main {
     width: max-content;
   }
 }
+
+.victory-times {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.victory-time {
+  color: #1a73e8;
+  font-size: 1.4rem;
+  font-weight: bold;
+  animation: victory-text 0.5s ease-out 0.9s both;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.best-time {
+  color: #666;
+  font-size: 1.2rem;
+  animation: victory-text 0.5s ease-out 1s both;
+}
+
+.new-record {
+  background: #4caf50;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  animation: record-pulse 1s ease-in-out infinite;
+}
+
+@keyframes record-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .victory-time {
+    font-size: 1.2rem;
+  }
+  
+  .best-time {
+    font-size: 1rem;
+  }
+  
+  .new-record {
+    font-size: 0.9rem;
+  }
+}
