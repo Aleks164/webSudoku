@@ -4,7 +4,7 @@
   padding: 1rem;
   text-align: center;
   min-height: 100vh;
-    overflow-x: hidden;
+  overflow-x: hidden;
 }
 
 .logo {
@@ -13,9 +13,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -24,6 +26,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -50,60 +53,60 @@
   align-items: center;
   background: #f5f5f5;
   padding: 20px;
-    width: 100%;
-    box-sizing: border-box;
-    overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 header {
   margin-bottom: 1rem;
   width: 100%;
   height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {
   font-size: 2.5rem;
   color: #222;
   margin: 0;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: heart-beat 1.5s ease-in-out infinite;
-    transform-origin: center;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: heart-beat 1.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes heart-beat {
+  0% {
+    transform: scale(1);
   }
-  
-  @keyframes heart-beat {
-    0% {
-      transform: scale(1);
-    }
-  
-    50% {
-      transform: scale(1.1);
-    }
-  
-    100% {
-      transform: scale(1);
-    }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 main {
   width: 100%;
   display: flex;
   flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 0 10px;
-    box-sizing: border-box;
+  align-items: center;
+  gap: 20px;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .board {
   width: min(90vw, 450px);
-    height: min(90vw, 450px);
+  height: min(90vw, 450px);
   background: #333;
   display: flex;
   flex-direction: column;
@@ -111,7 +114,7 @@ main {
   overflow: auto;
   box-shadow: 0 2px 16px #0001;
   padding: 2px;
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .row {
@@ -129,17 +132,54 @@ main {
   transition: all 0.2s;
   color: #000;
   font-weight: 500;
-    box-sizing: border-box;
+  box-sizing: border-box;
   display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    user-select: none;
-  }
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Добавляем более толстые границы для блоков 3x3 */
+.cell:nth-child(3n) {
+  border-right: 3px solid #444;
+}
+
+.cell:nth-child(3n + 1) {
+  border-left: 3px solid #444;
+}
+
+.row:nth-child(3n) .cell {
+  border-bottom: 3px solid #444;
+}
+
+.row:nth-child(3n + 1) .cell {
+  border-top: 3px solid #444;
+}
+
+/* Убираем двойные границы */
+.cell:nth-child(3n) + .cell {
+  border-left: none;
+}
+
+.row:nth-child(3n) + .row .cell {
+  border-top: none;
+}
+
+/* Стили для угловых ячеек */
+.cell:nth-child(3n):nth-child(3n + 1) {
+  border-left: 3px solid #444;
+}
+
+.row:nth-child(3n) .cell:nth-child(3n) {
+  border-right: 3px solid #444;
+}
+
 .cell:focus {
   background: #f8f9fa;
   color: #000;
 }
+
 .cell.cell-initial {
   background: #e3e3e3 !important;
   font-weight: bold;
@@ -171,6 +211,7 @@ main {
   color: #000 !important;
   font-weight: 700 !important;
 }
+
 .controls {
   display: flex;
   flex-direction: column;
@@ -293,83 +334,88 @@ main {
 
 @media (max-width: 600px) {
   #root {
-      padding: 0.5rem;
-    }
-  
-    .app {
-      padding: 10px;
-    }
-  
-    main {
-      padding: 0 5px;
-    }
+    padding: 0.5rem;
+  }
+
+  .app {
+    padding: 10px;
+  }
+
+  main {
+    padding: 0 5px;
+  }
+
   .board {
     width: min(95vw, 450px);
-      height: min(95vw, 450px);
-    }
-    
-    .number-pad {
-      width: min(95vw, 450px);
-      gap: 6px;
-    }
+    height: min(95vw, 450px);
+  }
+
+  .number-pad {
+    width: min(95vw, 450px);
+    gap: 6px;
+  }
+
   h1 {
     font-size: 1.5rem;
   }
-    .cell {
+
+  .cell {
     font-size: 1.2rem;
-  
-    
+
+
     .number-button {
       height: 40px;
       font-size: 1.2rem;
     }
-    
+
     .number-button.clear {
       height: 40px;
     }
+  }
+
+  .board.game-complete {
+    animation: victory-pulse 1s ease-in-out;
+  }
+
+  @keyframes victory-pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 2px 16px #0001;
     }
-    
-    .board.game-complete {
-      animation: victory-pulse 1s ease-in-out;
+
+    50% {
+      transform: scale(1.02);
+      box-shadow: 0 4px 24px rgba(26, 115, 232, 0.3);
     }
-    
-    @keyframes victory-pulse {
-      0% {
-        transform: scale(1);
-        box-shadow: 0 2px 16px #0001;
-      }
-    
-      50% {
-        transform: scale(1.02);
-        box-shadow: 0 4px 24px rgba(26, 115, 232, 0.3);
-      }
-    
-      100% {
-        transform: scale(1);
-        box-shadow: 0 2px 16px #0001;
-      }
+
+    100% {
+      transform: scale(1);
+      box-shadow: 0 2px 16px #0001;
     }
-    
-    .new-game-button {
-      width: 100%;
-      padding: 12px;
-      background: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    .new-game-button:hover {
-      background: #388e3c;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-.new-game-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .new-game-button {
+    width: 100%;
+    padding: 12px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .new-game-button:hover {
+    background: #388e3c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .new-game-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 }
