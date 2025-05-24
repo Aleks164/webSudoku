@@ -138,27 +138,19 @@ function App() {
                 const isSameRow = selectedCell?.[0] === i;
                 const isSameCol = selectedCell?.[1] === j;
                 return (
-                  <input
+                  <div
                     key={`${i}-${j}`}
-                    type="number"
-                    min="1"
-                    max="9"
-                    value={cell || ""}
-                    disabled={isInitial || isGameComplete}
                     className={`
+                      cell
                       ${isInitial ? "cell-initial" : ""} 
                       ${isSelected ? "cell-selected" : ""}
                       ${isSameRow ? "cell-same-row" : ""}
                       ${isSameCol ? "cell-same-col" : ""}
                     `}
                     onClick={() => handleCellClick(i, j)}
-                    onChange={(e) => {
-                      if (isInitial) return;
-                      const newBoard = board.map((r) => [...r]);
-                      newBoard[i][j] = parseInt(e.target.value) || 0;
-                      setBoard(newBoard);
-                    }}
-                  />
+                  >
+                    {cell || ""}
+                  </div>
                 );
               })}
             </div>

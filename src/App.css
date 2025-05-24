@@ -119,205 +119,177 @@ main {
   flex: 1;
 }
 
-input {
+.cell {
   flex: 1;
   height: 100%;
-    border: 1px solid #bbb;
+  border: 1px solid #bbb;
   text-align: center;
   font-size: 1.5rem;
   background: #fff;
   transition: all 0.2s;
-  outline: none;
   color: #000;
-    font-weight: 500;
+  font-weight: 500;
     box-sizing: border-box;
-    caret-color: transparent;
-    width: 100%;
+  display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
   }
-  
-  input:focus {
-    background: #f8f9fa;
-    color: #000;
-    caret-color: transparent;
-  }
-  
-  input::placeholder {
-    color: transparent;
-  }
-  
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  
-  input[type=number] {
-    -moz-appearance: textfield;
-  }
-  
-  input:disabled {
-    color: #000;
-    opacity: 1;
-    -webkit-text-fill-color: #000;
+.cell:focus {
+  background: #f8f9fa;
+  color: #000;
+}
+.cell.cell-initial {
+  background: #e3e3e3 !important;
+  font-weight: bold;
+  color: #000;
+  cursor: default;
 }
 
-input:last-child {
-  border-right: none;
+.cell.cell-initial.cell-same-row,
+.cell.cell-initial.cell-same-col {
+  background: #e3e3e3 !important;
+  font-weight: bold !important;
 }
 
-.row:last-child input {
-  border-bottom: none;
-}
-
-.cell-same-row,
-.cell-same-col {
+.cell.cell-same-row,
+.cell.cell-same-col {
   background: #f0f7ff !important;
   font-weight: 600 !important;
 }
 
-.cell-same-row.cell-same-col {
+.cell.cell-same-row.cell-same-col {
   background: #e8f0fe !important;
   font-weight: 700 !important;
 }
 
-.cell-selected {
+.cell.cell-selected {
   background: #e8f0fe !important;
   outline: 2px solid #1a73e8 !important;
   outline-offset: -2px !important;
   color: #000 !important;
   font-weight: 700 !important;
 }
-.cell-initial {
-  background: #e3e3e3 !important;
-    font-weight: bold;
-    color: #000;
-  }
-  
-  .cell-initial.cell-same-row,
-  .cell-initial.cell-same-col {
-    background: #e3e3e3 !important;
-    font-weight: bold !important;
-  }
-  
-  .controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    width: min(90vw, 450px);
-  }
-  
-  .number-pad {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    width: 100%;
-    padding: 0 10px;
-    box-sizing: border-box;
-  }
-  
-  .number-button {
-    height: 50px;
-    border: none;
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: min(90vw, 450px);
+}
+
+.number-pad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.number-button {
+  height: 50px;
+  border: none;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.number-button.invalid {
+  animation: invalid-shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.number-button:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.number-button::after {
+  content: attr(data-count);
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background: #1a73e8;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes invalid-shake {
+  0% {
+    transform: translateX(0);
     background: #fff;
-    border-radius: 8px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    transition: all 0.2s;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative;
   }
-  
-  .number-button.invalid {
-    animation: invalid-shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000px;
+
+  25% {
+    transform: translateX(-3px);
+    background: #ffebee;
+    box-shadow: 0 2px 4px rgba(211, 47, 47, 0.5);
   }
-  
-  .number-button:hover {
-    background: #f0f0f0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+  50% {
+    transform: translateX(3px);
+    background: #ffcdd2;
+    box-shadow: 0 2px 4px rgba(211, 47, 47, 0.7);
   }
-  
-  .number-button::after {
-    content: attr(data-count);
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 20px;
-    height: 20px;
-    background: #1a73e8;
-    color: white;
-    border-radius: 50%;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    border: 2px solid white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  75% {
+    transform: translateX(-3px);
+    background: #ffebee;
+    box-shadow: 0 2px 4px rgba(211, 47, 47, 0.5);
   }
-  
-  @keyframes invalid-shake {
-    0% {
-      transform: translateX(0);
-      background: #fff;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-  
-    25% {
-      transform: translateX(-3px);
-      background: #ffebee;
-      box-shadow: 0 2px 4px rgba(211, 47, 47, 0.5);
-    }
-  
-    50% {
-      transform: translateX(3px);
-      background: #ffcdd2;
-      box-shadow: 0 2px 4px rgba(211, 47, 47, 0.7);
-    }
-  
-    75% {
-      transform: translateX(-3px);
-      background: #ffebee;
-      box-shadow: 0 2px 4px rgba(211, 47, 47, 0.5);
-    }
-  
-    100% {
-      transform: translateX(0);
-      background: #fff;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+
+  100% {
+    transform: translateX(0);
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
-  .solve-button {
-    width: 100%;
-    padding: 12px;
-    background: #1a73e8;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    .solve-button:hover {
-      background: #1557b0;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    
-    .solve-button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+}
+
+.solve-button {
+  width: 100%;
+  padding: 12px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.solve-button:hover {
+  background: #1557b0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.solve-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
 @media (max-width: 600px) {
   #root {
@@ -343,9 +315,9 @@ input:last-child {
   h1 {
     font-size: 1.5rem;
   }
-  input {
+    .cell {
     font-size: 1.2rem;
-    }
+  
     
     .number-button {
       height: 40px;
