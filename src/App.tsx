@@ -139,6 +139,16 @@ function App() {
     }
   };
 
+  const handleClearCell = () => {
+    if (!selectedCell) return;
+    const [i, j] = selectedCell;
+    if (initialGameBoard[i][j] !== 0) return; // Нельзя очистить начальную ячейку
+
+    const newBoard = board.map((r) => [...r]);
+    newBoard[i][j] = 0;
+    setBoard(newBoard);
+  };
+
   const startNextGame = () => {
     const newBoard = generateNewBoard();
     setBoard(newBoard);
@@ -233,6 +243,13 @@ function App() {
                 </button>
               ) : null
             )}
+            <button
+              className="number-button clear"
+              onClick={handleClearCell}
+              title="Очистить ячейку"
+            >
+              ✕
+            </button>
           </div>
           {remainingMoves <= 10 && remainingMoves > 0 && !isGameComplete && (
             <button
@@ -244,6 +261,24 @@ function App() {
             </button>
           )}
         </div>
+        {isGameComplete && (
+          <div className="victory-message">
+            <h2>Вау, ты победил(а)!</h2>
+            <p>Как это получилось?!</p>
+            <p>
+              Это же невероятно сложная игра, в которой надо очень много
+              думать...
+            </p>
+            <div className="victory-emoji">🎉</div>
+            <button
+              className="victory-button"
+              onClick={startNextGame}
+              title="Начать новую игру"
+            >
+              Новая игра
+            </button>
+          </div>
+        )}
       </main>
     </div>
   );

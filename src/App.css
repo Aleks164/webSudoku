@@ -99,6 +99,19 @@ h1:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 150px;
   text-align: center;
+  background: #1a73e8;
+  color: white;
+}
+
+.header-button:hover {
+  background: #1557b0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .header-button.new-game-button {
@@ -391,6 +404,24 @@ main {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.number-button.clear {
+  background: #f44336;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.number-button.clear:hover {
+  background: #d32f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.number-button.clear:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 @media (max-width: 600px) {
   #root {
     padding: 0.5rem;
@@ -488,5 +519,138 @@ main {
   .new-game-button:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .number-button.clear {
+    font-size: 1rem;
+  }
+}
+
+.victory-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: victory-appear 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 1000;
+  max-width: 90%;
+  width: 400px;
+}
+
+.victory-message h2 {
+  color: #1a73e8;
+  font-size: 2rem;
+  margin: 0 0 1rem;
+  animation: victory-text 0.5s ease-out 0.3s both;
+}
+
+.victory-message p {
+  color: #444;
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+  opacity: 0;
+  animation: victory-text 0.5s ease-out 0.5s both;
+}
+
+.victory-message p:nth-child(3) {
+  animation-delay: 0.7s;
+}
+
+.victory-emoji {
+  font-size: 4rem;
+  margin-top: 1rem;
+  animation: victory-emoji 1s ease-out 1s infinite;
+}
+
+@keyframes victory-appear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes victory-text {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes victory-emoji {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .victory-message {
+    padding: 1.5rem;
+    width: 300px;
+  }
+
+  .victory-message h2 {
+    font-size: 1.5rem;
+  }
+
+  .victory-message p {
+    font-size: 1rem;
+  }
+
+  .victory-emoji {
+    font-size: 3rem;
+  }
+}
+
+.victory-button {
+  margin-top: 1.5rem;
+  padding: 12px 24px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  animation: victory-text 0.5s ease-out 1.2s both;
+}
+
+.victory-button:hover {
+  background: #1557b0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.victory-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+  .victory-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    margin-top: 1rem;
   }
 }
