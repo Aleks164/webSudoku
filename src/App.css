@@ -212,6 +212,22 @@ main {
   font-weight: 700 !important;
 }
 
+.cell.cell-same-number {
+  font-weight: 700;
+  color: #1a73e8;
+  text-shadow: 0 0 1px rgba(26, 115, 232, 0.3);
+}
+
+.cell.cell-same-number.cell-initial {
+  color: #1a73e8;
+  text-shadow: 0 0 1px rgba(26, 115, 232, 0.3);
+}
+
+.cell.cell-same-number.cell-selected {
+  color: #1a73e8;
+  text-shadow: 0 0 2px rgba(26, 115, 232, 0.5);
+}
+
 .controls {
   display: flex;
   flex-direction: column;

@@ -137,6 +137,10 @@ function App() {
                   selectedCell?.[0] === i && selectedCell?.[1] === j;
                 const isSameRow = selectedCell?.[0] === i;
                 const isSameCol = selectedCell?.[1] === j;
+                const isSameNumber =
+                  selectedCell &&
+                  cell !== 0 &&
+                  board[selectedCell[0]][selectedCell[1]] === cell;
                 return (
                   <div
                     key={`${i}-${j}`}
@@ -146,6 +150,7 @@ function App() {
                       ${isSelected ? "cell-selected" : ""}
                       ${isSameRow ? "cell-same-row" : ""}
                       ${isSameCol ? "cell-same-col" : ""}
+                      ${isSameNumber ? "cell-same-number" : ""}
                     `}
                     onClick={() => handleCellClick(i, j)}
                   >
