@@ -1,23 +1,97 @@
 import { useState, useMemo } from "react";
 import "./App.css";
 
-const initialBoard = [
-  [5, 3, 0, 0, 7, 0, 0, 0, 0],
-  [6, 0, 0, 1, 9, 5, 0, 0, 0],
-  [0, 9, 8, 0, 0, 0, 0, 6, 0],
-  [8, 0, 0, 0, 6, 0, 0, 0, 3],
-  [4, 0, 0, 8, 0, 3, 0, 0, 1],
-  [7, 0, 0, 0, 2, 0, 0, 0, 6],
-  [0, 6, 0, 0, 0, 0, 2, 8, 0],
-  [0, 0, 0, 4, 1, 9, 0, 0, 5],
-  [0, 0, 0, 0, 8, 0, 0, 7, 9],
-];
+// Функция для проверки, можно ли поставить число в ячейку
+const isValidPlacement = (board: number[][], row: number, col: number, num: number): boolean => {
+  for (let x = 0; x < 9; x++) {
+    if (board[row][x] === num) return false;
+  }
+  for (let x = 0; x < 9; x++) {
+    if (board[x][col] === num) return false;
+  }
+  const startRow = Math.floor(row / 3) * 3;
+  const startCol = Math.floor(col / 3) * 3;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[startRow + i][startCol + j] === num) return false;
+    }
+  }
+  return true;
+};
+
+// Функция для решения судоку
+const solveSudokuBoard = (board: number[][]): boolean => {
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (board[i][j] === 0) {
+        const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        for (let k = nums.length - 1; k > 0; k--) {
+          const j = Math.floor(Math.random() * (k + 1));
+          [nums[k], nums[j]] = [nums[j], nums[k]];
+        }
+        
+        for (const num of nums) {
+          if (isValidPlacement(board, i, j, num)) {
+            board[i][j] = num;
+            if (solveSudokuBoard(board)) {
+              return true;
+            }
+            board[i][j] = 0;
+          }
+        }
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+// Функция для генерации нового поля
+const generateNewBoard = (): number[][] => {
+  const board = Array(9).fill(null).map(() => Array(9).fill(0));
+  
+  for (let block = 0; block < 3; block++) {
+    const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    for (let i = nums.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+    
+    const startRow = block * 3;
+    const startCol = block * 3;
+    let numIndex = 0;
+    
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        board[startRow + i][startCol + j] = nums[numIndex++];
+      }
+    }
+  }
+  
+  solveSudokuBoard(board);
+  
+  const cellsToRemove = 40;
+  let removed = 0;
+  
+  while (removed < cellsToRemove) {
+    const row = Math.floor(Math.random() * 9);
+    const col = Math.floor(Math.random() * 9);
+    
+    if (board[row][col] !== 0) {
+      board[row][col] = 0;
+      removed++;
+    }
+  }
+  
+  return board;
+};
+
+const initialBoard = generateNewBoard();
 
 function App() {
   const [board, setBoard] = useState<number[][]>(initialBoard);
-  const [selectedCell, setSelectedCell] = useState<[number, number] | null>(
-    null
-  );
+  const [initialGameBoard, setInitialGameBoard] = useState<number[][]>(initialBoard);
+  const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
   const [invalidNumber, setInvalidNumber] = useState<number | null>(null);
   const [isGameComplete, setIsGameComplete] = useState(false);
 
@@ -46,30 +120,8 @@ function App() {
     return count;
   }, [board]);
 
-  const isValidMoveForBoard = (
-    board: number[][],
-    row: number,
-    col: number,
-    num: number
-  ): boolean => {
-    for (let x = 0; x < 9; x++) {
-      if (board[row][x] === num) return false;
-    }
-    for (let x = 0; x < 9; x++) {
-      if (board[x][col] === num) return false;
-    }
-    const startRow = Math.floor(row / 3) * 3;
-    const startCol = Math.floor(col / 3) * 3;
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (board[startRow + i][startCol + j] === num) return false;
-      }
-    }
-    return true;
-  };
-
   const handleCellClick = (i: number, j: number) => {
-    if (initialBoard[i][j] !== 0) return;
+    if (initialGameBoard[i][j] !== 0) return;
     setSelectedCell([i, j]);
   };
 
@@ -77,7 +129,7 @@ function App() {
     if (!selectedCell) return;
     const [i, j] = selectedCell;
 
-    if (isValidMoveForBoard(board, i, j, number)) {
+    if (isValidPlacement(board, i, j, number)) {
       const newBoard = board.map((r) => [...r]);
       newBoard[i][j] = number;
       setBoard(newBoard);
@@ -87,39 +139,27 @@ function App() {
     }
   };
 
-  const solveSudoku = () => {
-    const newBoard = board.map((r) => [...r]);
-
-    const solve = (b: number[][]): boolean => {
-      for (let i = 0; i < 9; i++) {
-        for (let j = 0; j < 9; j++) {
-          if (b[i][j] === 0) {
-            for (let num = 1; num <= 9; num++) {
-              if (isValidMoveForBoard(b, i, j, num)) {
-                b[i][j] = num;
-                if (solve(b)) {
-                  return true;
-                }
-                b[i][j] = 0;
-              }
-            }
-            return false;
-          }
-        }
-      }
-      return true;
-    };
-
-    if (solve(newBoard)) {
-      setBoard(newBoard);
-    }
-  };
-
-  const startNewGame = () => {
-    setBoard(initialBoard);
+  const startNextGame = () => {
+    const newBoard = generateNewBoard();
+    setBoard(newBoard);
+    setInitialGameBoard(newBoard);
     setSelectedCell(null);
     setInvalidNumber(null);
     setIsGameComplete(false);
+  };
+
+  const startNewGame = () => {
+    setBoard(initialGameBoard.map((row) => [...row]));
+    setSelectedCell(null);
+    setInvalidNumber(null);
+    setIsGameComplete(false);
+  };
+
+  const solveSudoku = () => {
+    const newBoard = board.map((r) => [...r]);
+    if (solveSudokuBoard(newBoard)) {
+      setBoard(newBoard);
+    }
   };
 
   return (
@@ -128,16 +168,16 @@ function App() {
         <button
           className="header-button new-game-button"
           onClick={startNewGame}
-          title="Новая игра"
+          title="Начать текущую игру заново"
         >
-          Новая
+          Заново
         </button>
         <h1 onClick={startNewGame} title="Перезапустить текущую игру">
           ❤️
         </h1>
         <button
           className="header-button next-game-button"
-          onClick={startNewGame}
+          onClick={startNextGame}
           title="Следующая игра"
         >
           Следующая
@@ -148,7 +188,7 @@ function App() {
           {board.map((row, i) => (
             <div key={i} className="row">
               {row.map((cell, j) => {
-                const isInitial = initialBoard[i][j] !== 0;
+                const isInitial = initialGameBoard[i][j] !== 0;
                 const isSelected =
                   selectedCell?.[0] === i && selectedCell?.[1] === j;
                 const isSameRow = selectedCell?.[0] === i;
